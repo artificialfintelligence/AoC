@@ -2,9 +2,13 @@ from aocd import get_data
 
 
 class Point:
-    def __init__(self, coords: tuple[int, int], value: str) -> None:
-        self._x = coords[0]
-        self._y = coords[1]
+    def __init__(self, *coords: int, value: str) -> None:
+        if len(coords) == 2:  # x & y supplied as separate args
+            self._x = coords[0]
+            self._y = coords[1]
+        else:  # (x, y) supplied as a tuple
+            self._x = coords[0][0]
+            self._y = coords[0][1]
         self.value = value
 
     @property
@@ -39,9 +43,21 @@ class Grid:
         self.data = raw_data.splitlines()
         self.n_rows = len(self.data)
         self.n_cols = len(self.data[0])
+        self.sPoint = None
+        self.ePoint = None
+        for i, row in enumerate(self.data):
+            if "S" in row:
+                j = row.find("S")
+                self.sPoint = Point(i, j, value="S")
+            if "E" in row:
+                j = row.find("E")
+                self.ePoint = Point(i, j, value="E")
 
     def __getitem__(self, idx: tuple[int, int]) -> Point:
-        return Point(idx, self.data[idx[0]][idx[1]])
+        return Point(idx, value=self.data[idx[0]][idx[1]])
+
+    def __repr__(self) -> str:
+        return "\n".join(self.data)
 
     def get_traversable_neighbours(self, idx: tuple[int, int]) -> list[Point]:
         neighbours = []
@@ -73,11 +89,13 @@ def main() -> None:
 
     grid = Grid(data)
 
-    test_idx = (1, 5)
-    print(grid[test_idx])
-    valid_neighbs = grid.get_traversable_neighbours(test_idx)
-    print(valid_neighbs)
-    print([p.height for p in valid_neighbs])
+    # print(grid.sPoint, grid.ePoint)
+    # print(grid.sPoint.height, grid.ePoint.height)
+    # test_idx = (1, 5)
+    # print(grid[test_idx])
+    # valid_neighbs = grid.get_traversable_neighbours(test_idx)
+    # print(valid_neighbs)
+    # print([p.height for p in valid_neighbs])
 
 
 if __name__ == "__main__":
