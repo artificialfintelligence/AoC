@@ -81,16 +81,60 @@ class Grid:
         return neighbours
 
 
+class Problem:
+    def __init__(self, grid: Grid) -> None:
+        self.grid = grid
+
+    def solve_part_1(self, from_coords: tuple[int, int]) -> int:
+        found = False
+        n_steps_till_found = -1
+
+        curr_coords = from_coords
+        curr_dist = 0
+        queue = [(curr_coords, curr_dist)]
+        seenCoords = {curr_coords}
+        while queue and not found:
+            curr_node = queue.pop(0)
+            curr_coords, curr_dist = curr_node[0], curr_node[1]
+            for neighb in self.grid.get_traversable_neighbours(curr_coords):
+                if not neighb.coords in seenCoords:
+                    seenCoords.add(neighb.coords)
+                    queue.append((neighb.coords, curr_dist + 1))
+                    if neighb.coords == self.grid.ePoint.coords:
+                        found = True
+                        n_steps_till_found = curr_dist + 1
+        return n_steps_till_found
+
+    def solve_part_2(self) -> None:
+        min_dist = float("inf")
+        for i, row in enumerate(self.grid.data):
+            for j, value in enumerate(row):
+                if self.grid[i, j].value in ["a", "S"]:
+                    dist = self.solve_part_1((i, j))
+                    if 0 < dist < min_dist:
+                        min_dist = dist
+        return min_dist
+
+
 def main() -> None:
     # data = get_data(day=12, year=2022)
 
-    with open("data/day12_test.txt", "r") as f:
+    with open("data/day12.txt", "r") as f:
         data = f.read()
 
     grid = Grid(data)
+    problem = Problem(grid)
+
+    n_steps = problem.solve_part_1(grid.sPoint.coords)
+    print(f"Part 1: From S to E in {n_steps} steps.")
+
+    print("Part 2: The minimum 'a' to 'z' distance is ...")
+    min_steps = problem.solve_part_2()
+    print(f"... {min_steps} steps.")
 
     # print(grid.sPoint, grid.ePoint)
     # print(grid.sPoint.height, grid.ePoint.height)
+
     # test_idx = (1, 5)
     # print(grid[test_idx])
     # valid_neighbs = grid.get_traversable_neighbours(test_idx)
