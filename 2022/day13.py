@@ -7,11 +7,14 @@ class Packet:
     def __init__(self, data):
         self.data = data.copy()
 
+    def __repr__(self) -> str:
+        return repr(self.data)
+
     def __lt__(self, other):
         if not isinstance(other, Packet):
             raise ValueError("Cannot compare Packet with non-Packet object.")
-        left = self.data
-        right = other.data
+        left = self.data.copy()
+        right = other.data.copy()
         # print(f"{left=} , {right=}")
         while len(left) > 0 and len(right) > 0:
             l = left.pop(0)
@@ -59,8 +62,44 @@ def get_solution_part_1(pairs: list[tuple[list, list]]) -> int:
     return sum_of_correct_indices
 
 
-def get_solution_part_2(pairs: list[tuple[list, list]]) -> int:
-    pass
+def custom_binary_search(arr: list[Packet], element: Packet) -> int:
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] < element:
+            left = mid + 1
+        elif element < arr[mid]:
+            right = mid - 1
+        else:
+            return mid
+    return left
+
+
+def get_solution_part_2(
+    pairs: list[tuple[list, list]], dividers: tuple[list, list]
+) -> int:
+    packets_sorted = []
+    div_packets_sorted = []
+    for pair in pairs:
+        for element in pair:
+            packet = Packet(element)
+            idx = custom_binary_search(packets_sorted, packet)
+            packets_sorted.insert(idx, packet)
+
+    # First, sort the divider packets separately to make sure we insert them in
+    # the full sorted list of packets in order. That way, inserting a divider
+    # won't affect the index of those inserted previously.
+    for divider in dividers:
+        div_packet = Packet(divider)
+        idx = custom_binary_search(div_packets_sorted, div_packet)
+        div_packets_sorted.insert(idx, div_packet)
+
+    decoder_key = 1
+    for div_packet in div_packets_sorted:
+        idx = custom_binary_search(packets_sorted, div_packet)
+        packets_sorted.insert(idx, div_packet)
+        decoder_key *= idx + 1
+    return decoder_key
 
 
 def main() -> None:
@@ -68,11 +107,12 @@ def main() -> None:
 
     with open("data/day13.txt", "r") as f:
         data = f.read()
-    pairs = get_list_of_pairs(data)
-    print(get_solution_part_1(pairs))
 
-    pairs_extended = pairs + [([[2]], [[6]])]
-    print(get_solution_part_1(pairs_extended))
+    pairs = get_list_of_pairs(data)
+    print(f"Part 1 solution: {get_solution_part_1(pairs)}")
+
+    dividers = ([[2]], [[6]])
+    print(f"Part 2 solution: {get_solution_part_2(pairs, dividers)}")
 
 
 if __name__ == "__main__":
