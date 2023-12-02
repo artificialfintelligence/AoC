@@ -1,6 +1,8 @@
 # pylint: disable=missing-module-docstring, missing-docstring
 
+import operator
 import re
+from functools import reduce
 
 
 def process_data(data: list[str]) -> dict[int : list[dict[str:int]]]:
@@ -35,26 +37,39 @@ def process_data(data: list[str]) -> dict[int : list[dict[str:int]]]:
     return output
 
 
+def solve_part_1(data: dict[int : list[dict[str:int]]]) -> int:
+    sum_of_valid_ids = 0
+    cube_counts_total = {"red": 12, "green": 13, "blue": 14}
+    for row_id, record in data.items():
+        is_valid = True
+        for draw in record:
+            if not is_valid:
+                break
+            for colour, count in draw.items():
+                if count > cube_counts_total[colour]:
+                    is_valid = False
+                    break
+        if is_valid:
+            sum_of_valid_ids += row_id
+    return sum_of_valid_ids
+
+
+def solve_part_2(data: dict[int : list[dict[str, int]]]) -> int:
+    total_power = 0
+    for _, record in data.items():
+        min_counts = {"red": 0, "green": 0, "blue": 0}
+        for draw in record:
+            for colour, count in draw.items():
+                min_counts[colour] = max(min_counts[colour], count)
+        power = reduce(operator.mul, min_counts.values(), 1)
+        total_power += power
+    return total_power
+
+
 def solve(data: list[str], part: int) -> int:
     data_processed = process_data(data)
     if part == 1:
-        sum_of_valid_ids = 0
-        cube_counts_total = {"red": 12, "green": 13, "blue": 14}
-        for row_id, record in data_processed.items():
-            is_valid = True
-            for draw in record:
-                if not is_valid:
-                    break
-                for colour, count in draw.items():
-                    if count > cube_counts_total[colour]:
-                        is_valid = False
-                        break
-            if is_valid:
-                sum_of_valid_ids += row_id
-        solution = sum_of_valid_ids
+        solution = solve_part_1(data_processed)
     else:  # part == 2
-        min_cube_counts = {"red": 0, "green": 0, "blue": 0}
-        total_power = 0
-
-        solution = total_power
+        solution = solve_part_2(data_processed)
     return solution
