@@ -5,7 +5,7 @@ from aocd import get_data
 
 
 def load_data(day: int, year: int, is_testmode: bool) -> list[str]:
-    data_filename_no_ext = os.path.splitext(os.path.basename(__file__))[0]
+    data_filename_no_ext = f"day{day:02}"
     if is_testmode:
         data_filename_no_ext += "_test"
     data_file_path = os.path.join("data", f"{data_filename_no_ext}.txt")
@@ -23,4 +23,5 @@ def load_data(day: int, year: int, is_testmode: bool) -> list[str]:
         with open(data_file_path, "w", encoding="utf-8") as f:
             f.write(data)
         print(f"Data succesfully downloaded and saved to {data_file_path}.")
+    data = data.split("\n")
     return data

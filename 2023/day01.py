@@ -14,7 +14,6 @@ def main(params: list[str]) -> None:
     is_testmode = params.testmode
 
     data = load_data(1, 2023, is_testmode)
-    data = data.split("\n")
 
     str2int = {
         "zero": "0",
