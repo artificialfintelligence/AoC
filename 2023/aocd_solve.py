@@ -18,7 +18,13 @@ def main(params: list[str]) -> None:
 
     data = load_data(day, year, is_testmode)
 
-    module = importlib.import_module(f"solvers.day{day:02}")
+    try:
+        module = importlib.import_module(f"solvers.day{day:02}")
+    except ModuleNotFoundError as e:
+        raise NotImplementedError(
+            f"Solver for day {day:02} not implemented yet."
+        ) from e
+
     solution = module.solve(data, part_num)
 
     print(f"Part {part_num} Solution: {solution}")
