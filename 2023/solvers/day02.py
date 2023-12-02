@@ -13,6 +13,7 @@ def process_data(data: list[str]) -> dict[int : list[dict[str:int]]]:
             Raw data in the common "list of strings" format output by the
             `data_io` module.
             example:
+            
             ["Game 1: 3 blue, 4 red; 1 red, 2 green; 2 green",
              "Game 2: 1 blue, 2 green, 1 red; 4 blue, 1 red"]
 
