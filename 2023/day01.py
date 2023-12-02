@@ -53,7 +53,12 @@ def main(params: list[str]) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="AoC 2023 Day 1 Puzzle Solver")
     parser.add_argument(
-        "--part", help="Part 1 or 2", type=int, choices=[1, 2], required=True
+        "--part",
+        "-p",
+        help="Part 1 or 2",
+        type=int,
+        choices=[1, 2],
+        required=True,
     )
 
     args = parser.parse_args()
