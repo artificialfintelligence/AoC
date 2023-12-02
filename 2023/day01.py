@@ -6,18 +6,14 @@
 import argparse
 import re
 
-# To just automatically get **today's** data: `from aocd import data`
-from aocd import get_data
+from data_io import load_data
 
 
 def main(params: list[str]) -> None:
     part_num = params.part
+    is_testmode = params.testmode
 
-    data = get_data(day=1, year=2023)
-
-    # with open("data/day01_test.txt", "r", encoding="utf-8") as f:
-    #     data = f.read()
-
+    data = load_data(1, 2023, is_testmode)
     data = data.split("\n")
 
     str2int = {
@@ -44,7 +40,7 @@ def main(params: list[str]) -> None:
     digits_str = [
         [str2int[i] if i in str2int else i for i in line] for line in matches
     ]
-    calibration_values = [int(l[0] + l[-1]) for l in digits_str]
+    calibration_values = [int(l[0] + l[-1]) for l in digits_str if l != []]
     calibration_total = sum(calibration_values)
 
     print(f"Part {part_num} Solution: {calibration_total}")
@@ -59,6 +55,15 @@ if __name__ == "__main__":
         type=int,
         choices=[1, 2],
         required=True,
+    )
+    parser.add_argument(
+        "--testmode",
+        "-t",
+        help="Whether to use sample ('_test') data",
+        type=bool,
+        default=False,
+        choices=[True, False],
+        required=False,
     )
 
     args = parser.parse_args()
