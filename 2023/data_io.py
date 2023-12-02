@@ -1,4 +1,5 @@
 # pylint: disable=missing-module-docstring, missing-docstring
+
 import os
 
 from aocd import get_data
