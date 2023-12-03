@@ -8,7 +8,7 @@ from aocd import get_data
 def load_data(day: int, year: int, is_testmode: bool) -> list[str]:
     data_filename_no_ext = f"day{day:02}"
     if is_testmode:
-        data_filename_no_ext += "_test"
+        data_filename_no_ext = "test_" + data_filename_no_ext
     data_file_path = os.path.join("data", f"{data_filename_no_ext}.txt")
     if os.path.isfile(data_file_path):
         print(f"Using local data file {data_file_path}...")

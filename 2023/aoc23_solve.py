@@ -55,7 +55,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--testmode",
         "-t",
-        help="Whether to use sample ('_test') data",
+        help="Whether to use sample data ('test_day##.txt')",
         type=bool,
         default=False,
         choices=[True, False],
