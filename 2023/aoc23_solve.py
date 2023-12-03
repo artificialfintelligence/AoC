@@ -10,7 +10,7 @@ from datetime import datetime
 from data_io import load_data
 
 
-def main(params: list[str]) -> None:
+def main(params: argparse.Namespace) -> None:
     part_num = params.part
     is_testmode = params.testmode
     day = params.day
