@@ -13,7 +13,7 @@ def process_data(data: list[str]) -> dict[int : list[dict[str:int]]]:
             Raw data in the common "list of strings" format output by the
             `data_io` module.
             example:
-            
+
             ["Game 1: 3 blue, 4 red; 1 red, 2 green; 2 green",
              "Game 2: 1 blue, 2 green, 1 red; 4 blue, 1 red"]
 
@@ -26,7 +26,7 @@ def process_data(data: list[str]) -> dict[int : list[dict[str:int]]]:
         {1: [{'blue': 3, 'red': 4}, {'red': 1, 'green': 2}, {'green': 2}],
          2: [{'blue': 1, 'green': 2, 'red': 1}, {'blue': 4, 'red': 1}]}
     """
-    output = dict()
+    output = {}
     for row in [r for r in data if r != ""]:
         parsed_row = re.match(r"^Game (\d+): (.*)", row)
         row_id, row_data = int(parsed_row.group(1)), parsed_row.group(2)
