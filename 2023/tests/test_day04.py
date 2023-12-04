@@ -19,10 +19,10 @@ with open(test_data_file_path, "w", encoding="utf-8") as f:
     f.write(TEST_DATA)
 
 EXPECTED_SOLUTION_PART_1_WITH_TEST_DATA = 13
-# EXPECTED_SOLUTION_PART_2_WITH_TEST_DATA = 0
+EXPECTED_SOLUTION_PART_2_WITH_TEST_DATA = 30
 
 EXPECTED_SOLUTION_PART_1_WITH_REAL_DATA = 25571
-# EXPECTED_SOLUTION_PART_2_WITH_REAL_DATA = 0
+EXPECTED_SOLUTION_PART_2_WITH_REAL_DATA = 8805731
 
 
 def test_part_1_with_test_data():
@@ -31,10 +31,10 @@ def test_part_1_with_test_data():
     assert solution == EXPECTED_SOLUTION_PART_1_WITH_TEST_DATA
 
 
-# def test_part_2_with_test_data():
-#     data = load_data(day=4, year=2023, is_testmode=True)
-#     solution = day04.solve(data, part=2)
-#     assert solution == EXPECTED_SOLUTION_PART_2_WITH_TEST_DATA
+def test_part_2_with_test_data():
+    data = load_data(day=4, year=2023, is_testmode=True)
+    solution = day04.solve(data, part=2)
+    assert solution == EXPECTED_SOLUTION_PART_2_WITH_TEST_DATA
 
 
 def test_part_1_with_real_data():
@@ -43,7 +43,7 @@ def test_part_1_with_real_data():
     assert solution == EXPECTED_SOLUTION_PART_1_WITH_REAL_DATA
 
 
-# def test_part_2_with_real_data():
-#     data = load_data(day=4, year=2023, is_testmode=False)
-#     solution = day04.solve(data, part=2)
-#     assert solution == EXPECTED_SOLUTION_PART_2_WITH_REAL_DATA
+def test_part_2_with_real_data():
+    data = load_data(day=4, year=2023, is_testmode=False)
+    solution = day04.solve(data, part=2)
+    assert solution == EXPECTED_SOLUTION_PART_2_WITH_REAL_DATA
