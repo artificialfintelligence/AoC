@@ -19,9 +19,9 @@ with open(test_data_file_path, "w", encoding="utf-8") as f:
     f.write(TEST_DATA)
 
 EXPECTED_SOLUTION_PART_1_WITH_TEST_DATA = 8
-EXPECTED_SOLUTION_PART_2_WITH_TEST_DATA = 2286
-
 EXPECTED_SOLUTION_PART_1_WITH_REAL_DATA = 2541
+
+EXPECTED_SOLUTION_PART_2_WITH_TEST_DATA = 2286
 EXPECTED_SOLUTION_PART_2_WITH_REAL_DATA = 66016
 
 
@@ -31,16 +31,16 @@ def test_part_1_with_test_data():
     assert solution == EXPECTED_SOLUTION_PART_1_WITH_TEST_DATA
 
 
-def test_part_2_with_test_data():
-    data = load_data(day=2, year=2023, is_testmode=True)
-    solution = day02.solve(data, part=2)
-    assert solution == EXPECTED_SOLUTION_PART_2_WITH_TEST_DATA
-
-
 def test_part_1_with_real_data():
     data = load_data(day=2, year=2023, is_testmode=False)
     solution = day02.solve(data, part=1)
     assert solution == EXPECTED_SOLUTION_PART_1_WITH_REAL_DATA
+
+
+def test_part_2_with_test_data():
+    data = load_data(day=2, year=2023, is_testmode=True)
+    solution = day02.solve(data, part=2)
+    assert solution == EXPECTED_SOLUTION_PART_2_WITH_TEST_DATA
 
 
 def test_part_2_with_real_data():
