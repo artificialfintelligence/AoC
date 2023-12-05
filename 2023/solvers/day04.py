@@ -58,12 +58,9 @@ def solve_part_2(
     n_cards = len(nums_winning)  # which equals `len(nums_we_have)`
     copies = [1] * n_cards
     for card_idx, nums2check in enumerate(nums_we_have):
-        for _ in range(copies[card_idx]):
-            winning_set = set(nums_winning[card_idx])
-            match_count = sum(1 for n in nums2check if n in winning_set)
-            copies[card_idx + 1 : card_idx + match_count + 1] = [
-                x + 1 for x in copies[card_idx + 1 : card_idx + match_count + 1]
-            ]
+        match_count = sum(1 for n in nums2check if n in nums_winning[card_idx])
+        for idx in range(card_idx + 1, card_idx + match_count + 1):
+            copies[idx] += copies[card_idx]
     return sum(copies)
 
 
