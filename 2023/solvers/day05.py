@@ -32,12 +32,28 @@ def process_data(
     return (init_seeds, mappings)
 
 
+def map_seed2loc(
+    seed: int, mappings: dict[str : list[tuple[int, int, int]]]
+) -> int:
+    src = seed
+    for _, mapping in mappings.items():
+        for dest_min, src_min, rng_len in mapping:
+            dest = src
+            if src_min <= src < src_min + rng_len:
+                dest = dest_min + src - src_min
+                src = dest
+                break
+    return dest
+
+
 def solve_part_1(
     init_seeds: list[int], mappings: dict[str : list[tuple[int, int, int]]]
 ) -> int:
-    min_loc = 0
+    locations = []
+    for seed in init_seeds:
+        locations.append(map_seed2loc(seed, mappings))
 
-    return min_loc
+    return min(locations)
 
 
 def solve_part_2(

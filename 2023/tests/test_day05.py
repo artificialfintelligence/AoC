@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 from data_io import load_data
-from solvers import day04
+from solvers import day05
 
 test_data_file_path = os.path.join("data", f"{Path(__file__).stem}.txt")
 
@@ -46,31 +46,31 @@ with open(test_data_file_path, "w", encoding="utf-8") as f:
     f.write(TEST_DATA)
 
 EXPECTED_SOLUTION_PART_1_WITH_TEST_DATA = 35
-# EXPECTED_SOLUTION_PART_1_WITH_REAL_DATA = 0
+EXPECTED_SOLUTION_PART_1_WITH_REAL_DATA = 227653707
 
 # EXPECTED_SOLUTION_PART_2_WITH_TEST_DATA = 0
 # EXPECTED_SOLUTION_PART_2_WITH_REAL_DATA = 0
 
 
 def test_part_1_with_test_data():
-    data = load_data(day=4, year=2023, is_testmode=True)
-    solution = day04.solve(data, part=1)
+    data = load_data(day=5, year=2023, is_testmode=True)
+    solution = day05.solve(data, part=1)
     assert solution == EXPECTED_SOLUTION_PART_1_WITH_TEST_DATA
 
 
-# def test_part_1_with_real_data():
-#     data = load_data(day=4, year=2023, is_testmode=False)
-#     solution = day04.solve(data, part=1)
-#     assert solution == EXPECTED_SOLUTION_PART_1_WITH_REAL_DATA
+def test_part_1_with_real_data():
+    data = load_data(day=5, year=2023, is_testmode=False)
+    solution = day05.solve(data, part=1)
+    assert solution == EXPECTED_SOLUTION_PART_1_WITH_REAL_DATA
 
 
 # def test_part_2_with_test_data():
-#     data = load_data(day=4, year=2023, is_testmode=True)
-#     solution = day04.solve(data, part=2)
+#     data = load_data(day=5, year=2023, is_testmode=True)
+#     solution = day05.solve(data, part=2)
 #     assert solution == EXPECTED_SOLUTION_PART_2_WITH_TEST_DATA
 
 
 # def test_part_2_with_real_data():
-#     data = load_data(day=4, year=2023, is_testmode=False)
-#     solution = day04.solve(data, part=2)
+#     data = load_data(day=5, year=2023, is_testmode=False)
+#     solution = day05.solve(data, part=2)
 #     assert solution == EXPECTED_SOLUTION_PART_2_WITH_REAL_DATA
