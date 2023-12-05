@@ -35,6 +35,53 @@ def solve_part_1(data: list[str]) -> int:
     return sum_part_nums
 
 
+def extract_numbers(line: str, start_idx: int, end_idx: int) -> list[int]:
+    """Helper function to extract full whole numbers from found chunks.
+
+    Args:
+        line (str): One full line of text.
+        start_idx (int): Zero-based index of where to start the search.
+        end_idx (int): Zero-based index (exclusive) of where to end the search.
+
+    Returns:
+        A list of extracted numbers, containing zero, one or two numbers.
+
+    Example:
+        With:
+        ```
+        line = '8*/351.633%.'
+        start_idx = 5
+        end_idx = 8
+        ```
+        the function extracts `[351, 633]` from the search substring `'1.6'`.
+
+    """
+    numbers = []
+    search_str = line[start_idx:end_idx]
+
+    for m in re.finditer(r"\d+", search_str):
+        seq = m.group()
+        i = start_idx + m.start() - 1
+        while i >= 0:
+            prev_char = line[i]
+            if prev_char.isnumeric():
+                seq = prev_char + seq
+            else:
+                break
+            i -= 1
+
+        i = start_idx + m.end()
+        while i < len(line):
+            next_char = line[i]
+            if next_char.isnumeric():
+                seq = seq + next_char
+            else:
+                break
+            i += 1
+        numbers.append(int(seq))
+    return numbers
+
+
 def solve_part_2(data: list[str]) -> int:
     n_lines = len(data)
     line_len = len(data[0])
@@ -49,29 +96,11 @@ def solve_part_2(data: list[str]) -> int:
             for line_idx in range(
                 max(line_num - 1, 0), 1 + min(line_num + 1, n_lines)
             ):
-                search_str = data[line_idx][search_start_idx:search_end_idx]
-
-                for m in re.finditer(r"\d+", search_str):
-                    seq = m.group()
-                    i = search_start_idx + m.start() - 1
-                    while i >= 0:
-                        prev_char = data[line_idx][i]
-                        if prev_char.isnumeric():
-                            seq = prev_char + seq
-                        else:
-                            break
-                        i -= 1
-
-                    i = search_start_idx + m.end()
-                    while i < line_len:
-                        next_char = data[line_idx][i]
-                        if next_char.isnumeric():
-                            seq = seq + next_char
-                        else:
-                            break
-                        i += 1
-                    adjacent_numbers.append(int(seq))
-
+                adjacent_numbers.extend(
+                    extract_numbers(
+                        data[line_idx], search_start_idx, search_end_idx
+                    )
+                )
             if len(adjacent_numbers) == 2:
                 sum_gear_ratios += adjacent_numbers[0] * adjacent_numbers[1]
 
