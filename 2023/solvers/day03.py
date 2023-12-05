@@ -45,38 +45,17 @@ def solve_part_2(data: list[str]) -> int:
             idx = match.start()
             search_start_idx = max(0, idx - 1)
             search_end_idx = min(line_len, idx + 2)
-            print(f"Found {match.group()} on line {line_num} at index {idx}.")
-            if line_num > 0:
-                search_str = data[line_num - 1][search_start_idx:search_end_idx]
+            # print(f"Found {match.group()} on line {line_num} at index {idx}.")
+            for line_idx in range(
+                max(line_num - 1, 0), 1 + min(line_num + 1, n_lines)
+            ):
+                search_str = data[line_idx][search_start_idx:search_end_idx]
 
                 for m in re.finditer(r"\d+", search_str):
                     seq = m.group()
                     i = search_start_idx + m.start() - 1
                     while i >= 0:
-                        prev_char = data[line_num - 1][i]
-                        if prev_char.isnumeric():
-                            seq = prev_char + seq
-                        else:
-                            break
-                        i -= 1
-
-                    i = search_start_idx + m.end()
-                    while i <= line_len:
-                        next_char = data[line_num - 1][i]
-                        if next_char.isnumeric():
-                            seq = seq + next_char
-                        else:
-                            break
-                        i += 1
-                    adjacent_numbers.append(int(seq))
-
-            if line_num < n_lines - 1:
-                search_str = data[line_num + 1][search_start_idx:search_end_idx]
-                for m in re.finditer(r"\d+", search_str):
-                    seq = m.group()
-                    i = search_start_idx + m.start() - 1
-                    while i >= 0:
-                        prev_char = data[line_num + 1][i]
+                        prev_char = data[line_idx][i]
                         if prev_char.isnumeric():
                             seq = prev_char + seq
                         else:
@@ -85,33 +64,7 @@ def solve_part_2(data: list[str]) -> int:
 
                     i = search_start_idx + m.end()
                     while i < line_len:
-                        next_char = data[line_num + 1][i]
-                        if next_char.isnumeric():
-                            seq = seq + next_char
-                        else:
-                            break
-                        i += 1
-                    adjacent_numbers.append(int(seq))
-
-            if idx > 0:
-                if line[idx - 1].isnumeric():
-                    seq = line[idx - 1]
-                    i = idx - 2
-                    while i >= 0:
-                        prev_char = line[i]
-                        if prev_char.isnumeric():
-                            seq = prev_char + seq
-                        else:
-                            break
-                        i -= 1
-                    adjacent_numbers.append(int(seq))
-
-            if idx < line_len - 1:
-                if line[idx + 1].isnumeric():
-                    seq = line[idx + 1]
-                    i = idx + 2
-                    while i < line_len:
-                        next_char = line[i]
+                        next_char = data[line_idx][i]
                         if next_char.isnumeric():
                             seq = seq + next_char
                         else:
@@ -120,7 +73,6 @@ def solve_part_2(data: list[str]) -> int:
                     adjacent_numbers.append(int(seq))
 
             if len(adjacent_numbers) == 2:
-                print(f"{adjacent_numbers = }\n")
                 sum_gear_ratios += adjacent_numbers[0] * adjacent_numbers[1]
 
     return sum_gear_ratios
