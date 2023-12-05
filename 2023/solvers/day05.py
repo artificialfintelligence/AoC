@@ -25,7 +25,7 @@ def process_data(
     curr_key = ""
     for line in data[1:]:
         if line and line[0].isalpha():
-            curr_key = line.replace(" map:\n", "")
+            curr_key = line.replace(" map:", "")
             mappings[curr_key] = []
         elif line and line[0].isnumeric():
             mappings[curr_key].append(tuple(int(x) for x in line.split()))
@@ -36,6 +36,7 @@ def solve_part_1(
     init_seeds: list[int], mappings: dict[str : list[tuple[int, int, int]]]
 ) -> int:
     min_loc = 0
+
     return min_loc
 
 
