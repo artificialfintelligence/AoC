@@ -1,7 +1,5 @@
 # pylint: disable=missing-module-docstring, missing-docstring
 
-import re
-
 
 def process_data(
     data: list[str],
@@ -52,7 +50,6 @@ def solve_part_1(
     locations = []
     for seed in init_seeds:
         locations.append(map_seed2loc(seed, mappings))
-
     return min(locations)
 
 
