@@ -56,8 +56,14 @@ def solve_part_1(
 def solve_part_2(
     init_seeds: list[int], mappings: dict[str : list[tuple[int, int, int]]]
 ) -> int:
-    result = 0
-    return result
+    seed_ranges = list(zip(init_seeds[::2], init_seeds[1::2]))
+    min_locs = []
+    for seed_range in seed_ranges:
+        locs = []
+        for seed in range(seed_range[0], seed_range[0] + seed_range[1]):
+            locs.append(map_seed2loc(seed, mappings))
+        min_locs.append(min(locs))
+    return min(min_locs)
 
 
 def solve(data: list[str], part: int) -> int:
