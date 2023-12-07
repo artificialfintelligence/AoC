@@ -3,7 +3,7 @@
 
 def process_data(
     data: list[str],
-) -> tuple[list[int], dict[str : list[tuple[int, int, int]]]]:
+) -> tuple[list[int], list[list[tuple[int, int, int]]]]:
     """Parses raw input data into more readily usable format as described below.
 
     Args:
@@ -12,29 +12,26 @@ def process_data(
             `data_io` module.
 
     Returns:
-        A tuple of two elements, the first being the list of initial seeds and
-        the second being a dictionary of the required mappings, where the string
-        keys name the mapping and the values are lists of tuples of integers,
-        where each tuple corresponds to a (destination range start, source range
-        start, range length) as per the puzzle description.
+        A tuple of two elements, the first being the list of initial seeds for
+        part 1 and the initial seed _ranges_ for part 2, the second being an
+        ordered list of the required mappings, where each element is in turn a
+        lists of tuples of integers, where each tuple corresponds to the
+        (destination range start, source range start, range length) format, as
+        per the puzzle description.
     """
-    init_seeds = [int(n) for n in data[0].replace("seeds: ", "").split()]
-    mappings = {}
-    curr_key = ""
+    seeds = [int(n) for n in data[0].replace("seeds: ", "").split()]
+    mappings = []
     for line in data[1:]:
         if line and line[0].isalpha():
-            curr_key = line.replace(" map:", "")
-            mappings[curr_key] = []
+            mappings.append([])
         elif line and line[0].isnumeric():
-            mappings[curr_key].append(tuple(int(x) for x in line.split()))
-    return (init_seeds, mappings)
+            mappings[-1].append(tuple(int(x) for x in line.split()))
+    return (seeds, mappings)
 
 
-def map_seed2loc(
-    seed: int, mappings: dict[str : list[tuple[int, int, int]]]
-) -> int:
+def map_seed2loc(seed: int, mappings: list[list[tuple[int, int, int]]]) -> int:
     src = seed
-    for _, mapping in mappings.items():
+    for mapping in mappings:
         for dest_min, src_min, rng_len in mapping:
             dest = src
             if src_min <= src < src_min + rng_len:
