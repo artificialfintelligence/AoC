@@ -69,6 +69,13 @@ def simplify_maps(
     return better_mappings
 
 
+def map_intervals(
+    spans_in: list[tuple[int, int]], mappings: list[list[tuple[int, int, int]]]
+) -> list[tuple[int, int]]:
+    spans_out = []
+    return spans_out
+
+
 def solve_part_1(
     init_seeds: list[int], mappings: list[list[tuple[int, int, int]]]
 ) -> int:
@@ -82,15 +89,11 @@ def solve_part_2(
     init_seeds: list[int], mappings: list[list[tuple[int, int, int]]]
 ) -> int:
     better_maps = simplify_maps(mappings)
-    return 0
-    # seed_ranges = list(zip(init_seeds[::2], init_seeds[1::2]))
-    # min_locs = []
-    # for seed_range in seed_ranges:
-    #     locs = []
-    #     for seed in range(seed_range[0], seed_range[0] + seed_range[1]):
-    #         locs.append(map_seed2loc(seed, mappings))
-    #     min_locs.append(min(locs))
-    # return min(min_locs)
+    seed_ranges = list(zip(init_seeds[::2], init_seeds[1::2]))
+    intervals = seed_ranges
+    for map_level in better_maps:
+        intervals = map_intervals(intervals, map_level)
+    return min(interval[0] for interval in intervals)
 
 
 def solve(data: list[str], part: int) -> int:
