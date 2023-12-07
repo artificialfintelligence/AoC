@@ -89,7 +89,10 @@ def solve_part_2(
     init_seeds: list[int], mappings: list[list[tuple[int, int, int]]]
 ) -> int:
     better_maps = simplify_maps(mappings)
-    seed_ranges = list(zip(init_seeds[::2], init_seeds[1::2]))
+    seed_ranges = [
+        (x[0], x[0] + x[1]) for x in zip(init_seeds[::2], init_seeds[1::2])
+    ]
+    print(f"{seed_ranges = }")
     intervals = seed_ranges
     for map_level in better_maps:
         intervals = map_intervals(intervals, map_level)
