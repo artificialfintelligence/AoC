@@ -41,8 +41,36 @@ def map_seed2loc(seed: int, mappings: list[list[tuple[int, int, int]]]) -> int:
     return dest
 
 
+def simplify_maps(
+    mappings: list[list[tuple[int, int, int]]]
+) -> list[list[tuple[int, int, int]]]:
+    """Convert mappings to more readily understandable format
+
+    Args:
+        mappings: A list of lists of 3-tuples in the original format described
+        in the puzzle where each tuple is a (destination range start, source
+        range start, range length) tuple.
+
+    Returns:
+        A list of lists of 3-tuples where the tuples correspond to the format:
+        (source range start, source range end, offset to be applied in order to
+        get to destination). Also the tuples in each sub-list are sorted by
+        source range start.
+    """
+    better_mappings = []
+    for m in mappings:
+        better_mappings.append([])
+        for interval in m:
+            src_start = interval[1]
+            src_end = interval[1] + interval[2]
+            offset = interval[0] - interval[1]
+            better_mappings[-1].append((src_start, src_end, offset))
+        better_mappings[-1].sort(key=lambda x: x[0])
+    return better_mappings
+
+
 def solve_part_1(
-    init_seeds: list[int], mappings: dict[str : list[tuple[int, int, int]]]
+    init_seeds: list[int], mappings: list[list[tuple[int, int, int]]]
 ) -> int:
     locations = []
     for seed in init_seeds:
@@ -51,16 +79,18 @@ def solve_part_1(
 
 
 def solve_part_2(
-    init_seeds: list[int], mappings: dict[str : list[tuple[int, int, int]]]
+    init_seeds: list[int], mappings: list[list[tuple[int, int, int]]]
 ) -> int:
-    seed_ranges = list(zip(init_seeds[::2], init_seeds[1::2]))
-    min_locs = []
-    for seed_range in seed_ranges:
-        locs = []
-        for seed in range(seed_range[0], seed_range[0] + seed_range[1]):
-            locs.append(map_seed2loc(seed, mappings))
-        min_locs.append(min(locs))
-    return min(min_locs)
+    better_maps = simplify_maps(mappings)
+    return 0
+    # seed_ranges = list(zip(init_seeds[::2], init_seeds[1::2]))
+    # min_locs = []
+    # for seed_range in seed_ranges:
+    #     locs = []
+    #     for seed in range(seed_range[0], seed_range[0] + seed_range[1]):
+    #         locs.append(map_seed2loc(seed, mappings))
+    #     min_locs.append(min(locs))
+    # return min(min_locs)
 
 
 def solve(data: list[str], part: int) -> int:
