@@ -15,8 +15,6 @@ Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83
 Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
 Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 """
-with open(test_data_file_path, "w", encoding="utf-8") as f:
-    f.write(TEST_DATA)
 
 EXPECTED_SOLUTION_PART_1_WITH_TEST_DATA = 13
 EXPECTED_SOLUTION_PART_1_WITH_REAL_DATA = 25571
@@ -26,6 +24,8 @@ EXPECTED_SOLUTION_PART_2_WITH_REAL_DATA = 8805731
 
 
 def test_part_1_with_test_data():
+    with open(test_data_file_path, "w", encoding="utf-8") as f:
+        f.write(TEST_DATA)
     data = load_data(day=4, year=2023, is_testmode=True)
     solution = day04.solve(data, part=1)
     assert solution == EXPECTED_SOLUTION_PART_1_WITH_TEST_DATA
@@ -38,6 +38,8 @@ def test_part_1_with_real_data():
 
 
 def test_part_2_with_test_data():
+    with open(test_data_file_path, "w", encoding="utf-8") as f:
+        f.write(TEST_DATA)
     data = load_data(day=4, year=2023, is_testmode=True)
     solution = day04.solve(data, part=2)
     assert solution == EXPECTED_SOLUTION_PART_2_WITH_TEST_DATA
