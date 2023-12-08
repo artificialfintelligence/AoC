@@ -70,10 +70,52 @@ def simplify_maps(
 
 
 def map_intervals(
-    spans_in: list[tuple[int, int]], mappings: list[list[tuple[int, int, int]]]
+    all_input_spans: list[tuple[int, int]],
+    mappings: list[list[tuple[int, int, int]]],
 ) -> list[tuple[int, int]]:
-    spans_out = []
-    return spans_out
+    all_output_spans = []
+    while all_input_spans:
+        span_in = all_input_spans.pop(0)
+        span_out = None
+        for mapping in mappings:
+            if mapping[1] <= span_in[0]:  # No overlap... left of span
+                # mappings are sorted by start index; keep looking
+                continue
+            if mapping[0] >= span_in[1]:  # No overlap... right of span
+                # mappings are sorted by start index; we're done for this span
+                span_out = span_in
+                break
+            if mapping[0] < span_in[0] and mapping[1] < span_in[1]:
+                # mapping overlaps span on span's left side
+                offset = mapping[2]
+                span_out = (span_in[0] + offset, mapping[1] + offset)
+                all_input_spans.append((mapping[1], span_in[1]))
+                break
+            if mapping[0] > span_in[0] and mapping[1] > span_in[1]:
+                # mapping overlaps span on span's right side
+                offset = mapping[2]
+                span_out = (mapping[0] + offset, span_in[1] + offset)
+                all_input_spans.append((span_in[0], mapping[0]))
+                break
+            if mapping[0] >= span_in[0] and mapping[1] <= span_in[1]:
+                # mapping is a subset of the span
+                offset = mapping[2]
+                span_out = (mapping[0] + offset, mapping[1] + offset)
+                if span_in[0] != mapping[0]:
+                    all_input_spans.append((span_in[0], mapping[0]))
+                if mapping[1] != span_in[1]:
+                    all_input_spans.append((mapping[1], span_in[1]))
+                break
+            if span_in[0] >= mapping[0] and span_in[1] <= mapping[1]:
+                # span is a subset of the mapping
+                offset = mapping[2]
+                span_out = (span_in[0] + offset, span_in[1] + offset)
+                break
+        # If we get here, no mapping was found, so use default offset = 0
+        if not span_out:
+            span_out = span_in
+        all_output_spans.append(span_out)
+    return all_output_spans
 
 
 def solve_part_1(
@@ -92,7 +134,6 @@ def solve_part_2(
     seed_ranges = [
         (x[0], x[0] + x[1]) for x in zip(init_seeds[::2], init_seeds[1::2])
     ]
-    print(f"{seed_ranges = }")
     intervals = seed_ranges
     for map_level in better_maps:
         intervals = map_intervals(intervals, map_level)
